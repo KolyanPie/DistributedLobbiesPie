@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -58,6 +59,17 @@ public class UserService {
         users.asMap().remove(id, name);
     }
 
+    public Map<String, String> list() {
+        return users.asMap();
+    }
+
+    public User getUser(String id) throws ExecutionException {
+        if (!users.asMap().containsKey(id)) {
+            throw new IllegalArgumentException();
+        }
+        return new User(id, users.get(id));
+    }
+
     private void validateName(String name) {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException("Name must contain text");
@@ -68,9 +80,5 @@ public class UserService {
         if (name.length() < 4 || name.length() > 32) {
             throw new IllegalArgumentException("Name must contain 4-32 symbols");
         }
-    }
-
-    public Map<String, String> list() {
-        return users.asMap();
     }
 }
