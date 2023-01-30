@@ -44,7 +44,7 @@ public class RoomController {
     }
 
     @GetMapping("/list")
-    public Map<String, Room> remove() {
+    public Map<String, Room> list() {
         return roomService.list();
     }
 }
